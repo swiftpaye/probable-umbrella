@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>شركة خير الأنعام العقارية – الكويت</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Force Tajawal everywhere */
+    html, body, *, button, input, textarea, select, a, p, h1, h2, h3, h4, h5, h6, li, span, div {
+      font-family: 'Tajawal', 'Segoe UI', sans-serif !important;
+    }
+
+    :root {
+      --red:     #C41E3A;
+      --red-lt:  #E84C5E;
+      --red-dk:  #8B1528;
+      --black:   #ffffff;
+      --black2:  #f5f5f5;
+      --white:   #F5F5F5;
+      --muted:   #999999;
+      --ease:    cubic-bezier(.25,.8,.25,1);
+    }
+
+    html { scroll-behavior: auto; }
+    body { background: var(--white); color: var(--black); direction: rtl; overflow-x: hidden; line-height: 1.6; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #ffffff; }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: #ffffff; color: #0A0A0A; border-bottom: 1px solid rgba(10,10,10,.15);
+      font-size: .79rem; font-weight: 500;
+      padding: .38rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .topbar a { transition: color .16s; }
+    .topbar a:hover { color: #fff; }
+    .tb-r, .tb-l { display: flex; align-items: center; gap: .85rem; }
+    .tb-sep { opacity: .3; }
+    @media(max-width:600px){ .tb-l { display:none; } }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 900;
+      background: rgba(10,10,10,.97);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(196,30,58,.22);
+      padding: .6rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .brand { display: flex; align-items: center; gap: .75rem; }
+    .brand img {
+      width: 56px; height: 56px; object-fit: contain; border-radius: 50%;
+      filter: drop-shadow(0 0 7px rgba(196,30,58,.38));
+    }
+    .brand-name  { font-size: 1.05rem; font-weight: 900; color: var(--red-lt); display: block; line-height: 1.3; }
+    .brand-tag   { font-size: .66rem; font-weight: 400; color: #0A0A0A; display: block; line-height: 1.3; }
+    .brand-sub {
+      font-size: .62rem;
+      font-weight: 500;
+      color: #ffffff;
+      display: block;
+      line-height: 1.3;
+      letter-spacing: .04em;
+    }
+
+    /* desktop nav */
+    .desk-nav { display: flex; align-items: center; gap: .08rem; }
+    .desk-nav a {
+      font-size: .86rem; font-weight: 500; color: #C41E3A;
+      padding: .4rem .74rem; border-radius: 7px;
+      transition: color .16s, background .16s;
+    }
+    .desk-nav a:hover, .desk-nav a.active { color: #8B1528; background: rgba(196,30,58,.1); }
+    .desk-nav .cta {
+      background: linear-gradient(135deg,var(--red),var(--red-dk));
+      color: #ffffff !important; font-weight: 700 !important;
+      border-radius: 50px !important;
+      box-shadow: 0 4px 14px rgba(196,30,58,.38);
+      transition: box-shadow .16s, transform .14s !important;
+    }
+    .desk-nav .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(196,30,58,.52) !important;
+      background: linear-gradient(135deg,var(--red),var(--red-dk)) !important;
+      color: #ffffff !important;
+    }
+
+    /* hamburger */
+    .burger {
+      display: none; flex-direction: column; justify-content: center;
+      gap: 5px; width: 36px; height: 36px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .burger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--red); border-radius: 2px;
+      transition: transform .26s var(--ease), opacity .18s;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media(max-width:820px) { .desk-nav{display:none;} .burger{display:flex;} }
+
+    /* ── DRAWER (slides from right) ── */
+    .overlay {
+      position: fixed; inset: 0; z-index: 800;
+      background: rgba(0,0,0,.35);
+      opacity: 0; pointer-events: none;
+      transition: opacity .26s var(--ease);
+    }
+    .overlay.show { opacity: 1; pointer-events: all; }
+
+    .drawer {
+      position: fixed; top: 0; right: -110%; bottom: 0;
+      width: min(290px,80vw); z-index: 810;
+      background: #ffffff;
+      border-left: 1px solid rgba(196,30,58,.2);
+      padding: 4.5rem 1.4rem 2rem;
+      display: flex; flex-direction: column; gap: .28rem;
+      transition: right .28s var(--ease);
+      overflow-y: auto;
+    }
+    .drawer.show { right: 0; }
+    .drawer a {
+      font-size: .98rem; font-weight: 600; color: #C41E3A;
+      padding: .72rem 1rem; border-radius: 9px;
+      border: 1px solid transparent;
+      transition: color .16s, background .16s, border-color .16s;
+    }
+    .drawer a:hover {
+      color: var(--red-lt);
+      background: rgba(196,30,58,.09);
+      border-color: rgba(196,30,58,.2);
+    }
+    .drawer .d-cta {
+      margin-top: .9rem;
+      background: linear-gradient(135deg,var(--red),var(--red-dk));
+      color: #ffffff !important; font-weight: 700 !important;
+      text-align: center; border-radius: 50px !important;
+      box-shadow: 0 4px 14px rgba(196,30,58,.38);
+    }
+    .d-close {
+      position: absolute; top: 1rem; left: 1rem;
+      background: rgba(10,10,10,.05);
+      border: 1px solid rgba(10,10,10,.15);
+      color: var(--red-lt); width: 34px; height: 34px;
+      border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .16s;
+    }
+    .d-close:hover { background: rgba(255,255,255,.14); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; background: #ffffff;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiEIfGpJW0rw08oRBE2zpC14qnmIjxboRow-lhOzEBeRQRtEu5arGnVUjpSVIspBvqa6ZfqPpc1aHRsJdw4FIkiiJbxiHPStAUoC5fJ_VZvPkUboa7b-p5GpPe3kiyuZGxUwqM6W4GK_IXKfMNyUBXBwbvsgZYTEm9jl7tQ5Lw7zonzNasIJqXc59PTnQ6u/s1600/1000029444.jpg') center/cover no-repeat;
+      opacity: .85;
+      filter: saturate(1.1) contrast(1.15) brightness(1.05);
+    }
+    .hero-ov {
+      position: absolute; inset: 0;
+      background: linear-gradient(130deg,rgba(10,10,10,.93) 0%,rgba(10,10,10,.58) 55%,rgba(10,10,10,.28) 100%);
+    }
+    .geo { position: absolute; pointer-events: none; border: 1px solid rgba(196,30,58,.16); border-radius: 3px; }
+    .ga  { width:290px; height:290px; top:-65px; left:-65px; transform:rotate(20deg); }
+    .gb  { width:150px; height:150px; bottom:90px; left:18%; transform:rotate(45deg); opacity:.45; }
+    .gc  { width:70px; height:70px; top:33%; right:9%; transform:rotate(12deg); opacity:.38; }
+
+    .hero-inner {
+      position: relative; z-index: 2;
+      text-align: center; padding: 2rem 1.5rem; max-width: 760px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(196,30,58,.13); border: 1px solid rgba(196,30,58,.36);
+      color: var(--red-lt); font-size: .74rem; font-weight: 700; letter-spacing: .13em;
+      padding: .36rem 1.1rem; border-radius: 50px; margin-bottom: 1.4rem;
+      animation: fadeUp .7s ease both;
+    }
+    .hero h1 {
+      font-size: clamp(2rem,5.5vw,3.8rem); font-weight: 900;
+      color: #C41E3A; line-height: 1.18; margin-bottom: .85rem;
+      animation: fadeUp .72s .08s ease both;
+      text-shadow: 0 2px 10px rgba(0,0,0,.3);
+    }
+    .hero h1 em { color: var(--red-lt); font-style: normal; }
+    .hero p {
+      font-size: .98rem; color: #fff;
+      max-width: 500px; margin: 0 auto 2rem; line-height: 1.78;
+      animation: fadeUp .72s .16s ease both;
+    }
+    .hero-btns {
+      display: flex; justify-content: center; gap: .85rem; flex-wrap: wrap;
+      animation: fadeUp .72s .24s ease both;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg,var(--red),var(--red-dk));
+      color: var(--black); font-weight: 700; font-size: .95rem;
+      padding: .8rem 2rem; border-radius: 50px; border: none;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(196,30,58,.4);
+      transition: transform .16s, box-shadow .16s; display: inline-block;
+    }
+    .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(196,30,58,.55); }
+    .btn-ghost {
+      background: transparent; color: var(--red-lt);
+      font-weight: 600; font-size: .95rem;
+      padding: .78rem 2rem; border-radius: 50px;
+      border: 1.5px solid rgba(196,30,58,.48);
+      transition: background .16s; display: inline-block;
+    }
+    .btn-ghost:hover { background: rgba(196,30,58,.1); }
+
+    .scroll-hint {
+      position: absolute; bottom: 1.8rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .32rem;
+      color: rgba(255,255,255,.6); font-size: .66rem; letter-spacing: .07em;
+      animation: bob 2.2s ease-in-out infinite;
+    }
+    .scroll-hint svg { width: 17px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ── SHARED SECTION ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1160px; margin: 0 auto; }
+    .sec-tag {
+      display: inline-block;
+      background: rgba(196,30,58,.1); border: 1px solid rgba(196,30,58,.3);
+      color: var(--red-dk); font-size: .69rem; font-weight: 700; letter-spacing: .14em;
+      padding: .33rem .95rem; border-radius: 50px; margin-bottom: .85rem;
+    }
+    .sec-title {
+      font-size: clamp(1.5rem,3.5vw,2.4rem); font-weight: 900;
+      color: #C41E3A; line-height: 1.22; margin-bottom: .65rem;
+    }
+    .sec-title span { color: var(--red-dk); }
+    .sec-sub { font-size: .92rem; color: #0A0A0A; line-height: 1.75; max-width: 530px; }
+    .divider { width: 52px; height: 3px; background: linear-gradient(90deg,var(--red),transparent); border-radius: 3px; margin: .8rem 0 1.5rem; }
+
+    .dark .sec-tag   { background: rgba(196,30,58,.14); border-color: rgba(196,30,58,.36); color: var(--red-lt); }
+    .dark .sec-title { color: #C41E3A; }
+    .dark .sec-sub   { color: #0A0A0A; }
+    .dark .divider   { background: linear-gradient(90deg,var(--red-lt),transparent); }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+    .reveal.on { opacity: 1; transform: none; }
+
+    /* ── ABOUT ── */
+    #about { background: var(--white); }
+    .about-grid { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center; margin-top: 2.8rem; text-align: center; }
+    .aimg { position: relative; }
+    .aimg img { width: 100%; height: 400px; object-fit: cover; border-radius: 14px; box-shadow: 0 10px 40px rgba(10,10,10,.38); }
+    
+    
+      to { opacity: 1; transform: scale(1); }
+    }
+    .apill {
+      position: absolute; bottom: -16px; left: -16px;
+      background: linear-gradient(135deg,var(--red),var(--red-dk));
+      color: var(--black); padding: .95rem 1.3rem; border-radius: 12px;
+      font-weight: 900; font-size: 1.3rem; line-height: 1.1;
+      box-shadow: 0 8px 20px rgba(196,30,58,.42);
+    }
+    .apill small { font-size: .68rem; font-weight: 500; display: block; margin-top: .22rem; }
+
+    .chk { list-style: none; display: flex; flex-direction: column; gap: .65rem; margin: 1.3rem 0; }
+    .chk li { display: flex; align-items: flex-start; gap: .65rem; font-size: .9rem; color: #0A0A0A; line-height: 1.55; }
+    .chk li::before {
+      content: ''; width: 19px; height: 19px; flex-shrink: 0; margin-top: 2px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23C41E3A'%3E%3Cpath fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clip-rule='evenodd'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    @media(max-width:760px){ .about-grid{grid-template-columns:1fr;gap:2.5rem;} }
+
+    /* ── SERVICES ── */
+    #services { background: #ffffff; }
+    .svc-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 1.3rem; margin-top: 2.8rem; }
+    .svc {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(196,30,58,.13);
+      border-radius: 14px; padding: 1.7rem 1.4rem;
+      transition: background .2s, transform .2s, border-color .2s;
+    }
+    .svc:hover { background: rgba(196,30,58,.07); border-color: rgba(196,30,58,.36); transform: translateY(-5px); }
+    .svc-ico {
+      width: 48px; height: 48px;
+      background: rgba(196,30,58,.1); border: 1px solid rgba(196,30,58,.2);
+      border-radius: 11px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.45rem; margin-bottom: 1rem;
+    }
+    .svc h3 { font-size: .98rem; font-weight: 700; color: var(--red-lt); margin-bottom: .42rem; }
+    .svc p  { font-size: .82rem; color: #0A0A0A; line-height: 1.65; }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--white); }
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.6rem; margin-top: 2.8rem; }
+    .proj {
+      background: #fff; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 4px 18px rgba(10,10,10,.09);
+      transition: transform .26s var(--ease), box-shadow .26s var(--ease);
+    }
+    .proj:hover { transform: translateY(-7px); box-shadow: 0 14px 40px rgba(10,10,10,.16); }
+    .proj-img-w { overflow: hidden; height: 215px; }
+    .proj-img-w img { width: 100%; height: 100%; object-fit: cover; transition: transform .48s var(--ease); }
+    .proj:hover .proj-img-w img { transform: scale(1.07); }
+    .proj-body { padding: 1rem 1.25rem 1.2rem; }
+    .proj-tag { font-size: .67rem; font-weight: 700; letter-spacing: .1em; color: var(--red-dk); margin-bottom: .32rem; display: block; }
+    .proj h3 { font-size: .95rem; font-weight: 700; color: var(--black); }
+    .proj p  { font-size: .81rem; color: #0A0A0A; margin-top: .28rem; line-height: 1.54; }
+
+    /* ── WHY US ── */
+    #why {
+      background: linear-gradient(135deg,#ffffff 0%,#f5f5f5 100%);
+      position: relative; overflow: hidden;
+    }
+    #why::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 52% 52% at 16% 50%,rgba(196,30,58,.08) 0%,transparent 70%);
+    }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 1.9rem; margin-top: 2.8rem; position: relative; }
+    .why-item { display: flex; align-items: flex-start; gap: .85rem; }
+    .why-n { font-size: 2.6rem; font-weight: 900; color: rgba(196,30,58,.13); line-height: 1; min-width: 44px; }
+    .why-t h3 { font-size: .96rem; font-weight: 700; color: var(--red-lt); margin-bottom: .36rem; }
+    .why-t p  { font-size: .82rem; color: #0A0A0A; line-height: 1.65; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--white); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8rem; align-items: start; margin-top: 2.8rem; }
+    @media(max-width:760px){ .contact-grid{grid-template-columns:1fr;} }
+
+    .c-cards { display: flex; flex-direction: column; gap: 1.1rem; }
+    .c-card {
+      display: flex; align-items: center; gap: .95rem;
+      background: #fff; border: 1px solid rgba(196,30,58,.18);
+      border-radius: 12px; padding: 1rem 1.2rem;
+      transition: border-color .18s, box-shadow .18s;
+    }
+    .c-card:hover { border-color: #C41E3A; box-shadow: 0 4px 16px rgba(196,30,58,.13); }
+    .c-ico {
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: linear-gradient(135deg,var(--red),var(--red-dk));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .c-ico svg { width: 20px; height: 20px; fill: var(--black); }
+    .c-lbl { font-size: .69rem; font-weight: 700; letter-spacing: .05em; color: #0A0A0A; margin-bottom: .15rem; }
+    .c-val { font-size: .91rem; font-weight: 700; color: var(--black); direction: ltr; text-align: right; }
+    .wa-ico .c-ico { background: linear-gradient(135deg,#25D366,#128C7E); }
+    .ig-ico .c-ico { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+
+    .map-box { border-radius: 14px; overflow: hidden; border: 2px solid rgba(196,30,58,.2); box-shadow: 0 8px 36px rgba(10,10,10,.38); }
+    .map-box iframe { width: 100%; height: 330px; border: none; display: block; }
+    .map-foot { background: #fff; padding: .85rem 1.1rem; border-top: 1px solid rgba(196,30,58,.12); font-size: .81rem; color: #0A0A0A; line-height: 1.6; }
+    .map-foot a { color: var(--red-dk); font-weight: 700; }
+    .map-foot a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #ffffff; color: #0A0A0A;
+      text-align: center; padding: 1.8rem 1.5rem; font-size: .8rem;
+      border-top: 1px solid rgba(196,30,58,.13);
+    }
+    .foot-soc { display: flex; justify-content: center; gap: .8rem; margin-bottom: .85rem; }
+    .soc-btn {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(196,30,58,.2);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--red-lt); transition: background .16s, border-color .16s;
+    }
+    .soc-btn svg { width: 16px; height: 16px; fill: currentColor; }
+    .soc-btn:hover { background: rgba(196,30,58,.13); border-color: #C41E3A; }
+    .foot-name { color: #0A0A0A; font-size: .9rem; font-weight: 700; margin-bottom: .28rem; }
+    .foot-copy { font-size: .72rem; margin-top: .65rem; }
+    .foot-copy a { color: var(--red-lt); }
+
+    /* ── FLOATING WA ── */
+    .float-wa {
+      position: fixed; bottom: 1.7rem; left: 1.7rem; z-index: 990;
+      width: 54px; height: 54px; background: #25D366; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 20px rgba(37,211,102,.44);
+      color: #fff; transition: transform .16s, box-shadow .16s;
+    }
+    .float-wa svg { width: 26px; height: 26px; fill: currentColor; }
+    .float-wa:hover { transform: scale(1.12); box-shadow: 0 10px 28px rgba(37,211,102,.58); }
+    .wa-tip {
+      position: absolute; left: 64px;
+      background: #25D366; color: #fff;
+      font-size: .74rem; font-weight: 700;
+      padding: .26rem .7rem; border-radius: 50px;
+      white-space: nowrap; pointer-events: none;
+      opacity: 0; transform: translateX(5px);
+      transition: opacity .16s, transform .16s;
+    }
+    .float-wa:hover .wa-tip { opacity: 1; transform: translateX(0); }
+
+    
+    /* ── VIDEO ── */
+    #video { background: linear-gradient(135deg,#f5f5f5 0%,#ffffff 100%); }
+    .video-wrapper {
+      max-width: 540px; margin: 2.8rem auto 0;
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid rgba(196,30,58,.25);
+      box-shadow: 0 12px 48px rgba(0,0,0,.35);
+    }
+    .video-box {
+      background: #000;
+      position: relative;
+      height: 600px;
+      overflow: hidden;
+    }
+    .video-box iframe {
+      width: 100%; height: 720px; border: none; display: block;
+      margin-top: -60px;
+    }
+    .video-mask-top {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 55px; background: #000; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px;
+    }
+    .video-mask-top::before {
+      content: '▶'; color: var(--red); font-size: 1.2rem;
+    }
+    .video-mask-top::after {
+      content: 'فيديو تعريفي'; color: #fff; font-size: .85rem; font-weight: 700;
+    }
+    .video-mask-bottom {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 45px; background: #000; z-index: 10;
+    }
+    @media(max-width:600px){ 
+      .video-box { height: 480px; }
+      .video-box iframe { height: 580px; } 
+    }
+    /* ── LOGO ANIMATION ── */
+    .logo-box {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.12);
+      border: 2px solid rgba(196,30,58,.2);
+      overflow: visible;
+      padding: 2rem;
+    }
+    .logo-box .logo-spin {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,.15));
+      animation: logoSpin 2s ease-out 0.3s both;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    @keyframes logoSpin {
+      0%   { transform: perspective(500px) rotateY(-180deg) scale(0.4); opacity: 0; }
+      50%  { transform: perspective(500px) rotateY(20deg) scale(1.08); opacity: 1; }
+      75%  { transform: perspective(500px) rotateY(-5deg) scale(0.97); }
+      100% { transform: perspective(500px) rotateY(0deg) scale(1); opacity: 1; }
+    }
+
+    /* ── BLACK ICON CARDS ── */
+    .c-card.black-ico .c-ico {
+      background: linear-gradient(135deg,#1a1a1a,#0a0a0a);
+    }
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+    @keyframes bob {
+      0%,100%{transform:translateX(-50%) translateY(0)}
+      50%{transform:translateX(-50%) translateY(6px)}
+    }
+  </style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-l">
+    <span>📍 دولة الكويت</span>
+    <span class="tb-sep">|</span>
+    <a href="mailto:q8forrent@gmail.com">q8forrent@gmail.com</a>
+  </div>
+  <div class="tb-r">
+    <a href="tel:+96590999698">📞 +965 9099 9698</a>
+    <span class="tb-sep">|</span>
+    <a href="https://wa.me/96566204022" target="_blank" rel="noopener">واتساب</a>
+    <span class="tb-sep">|</span>
+    <a href="https://www.instagram.com/q8forrent" target="_blank" rel="noopener">إنستغرام</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<<header>
+  <a href="#home" class="brand nav-link">
+    <img src="data:image/jpeg;base64,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"
+         alt="شعار الشركة"/>
+    <div>
+      <span class="brand-name">خير الأنعام العقارية</span>
+      <span class="brand-tag">متخصصون في إدارة الأملاك</span>
+      <span class="brand-sub">شركة عقارية موثوقة في الكويت</span>
+    </div>
+  </a>
+
+  <nav class="desk-nav">
+    <a href="#home"     class="nav-link">الرئيسية</a>
+    <a href="#about"    class="nav-link">من نحن</a>
+    <a href="#services" class="nav-link">خدماتنا</a>
+    <a href="#video"    class="nav-link">🎬 فيديو</a>
+    <a href="#why"      class="nav-link">لماذا نحن</a>
+    <a href="#contact"  class="nav-link cta">تواصل معنا</a>
+  </nav>
+
+  <button class="burger" id="burgerBtn" aria-label="القائمة">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<<nav class="drawer" id="drawer">
+  <button class="d-close" id="dClose">✕</button>
+  <a href="#home"     class="nav-link">الرئيسية</a>
+  <a href="#about"    class="nav-link">من نحن</a>
+  <a href="#services" class="nav-link">خدماتنا</a>
+  <a href="#video"    class="nav-link">🎬 شاهد فيديو لنا</a>
+  <a href="#why"      class="nav-link">لماذا نحن</a>
+  <a href="#contact"  class="nav-link d-cta">تواصل معنا</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="geo ga"></div>
+  <div class="geo gb"></div>
+  <div class="geo gc"></div>
+  <div class="hero-inner">
+    <span class="hero-badge">✦ شركة عقارية موثوقة في الكويت ✦</span>
+    <h1>شركة <em>خير الأنعام</em><br>العقارية</h1>
+    <p>متخصصون في إدارة الأملاك وتأجير العقارات السكنية والتجارية في دولة الكويت بأعلى معايير الجودة والاحترافية</p>
+    <div class="hero-btns">
+      <a href="#contact"  class="btn-gold nav-link">تواصل معنا</a>
+      <a href="#services" class="btn-ghost nav-link">خدماتنا</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    <span>للأسفل</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="reveal">
+      <span class="sec-tag">✦ من نحن</span>
+      <h2 class="sec-title">خبرة ترسّخت<br>عبر <span>السنين</span></h2>
+      <div class="divider"></div>
+      <p class="sec-sub">شركة كويتية رائدة متخصصة في إدارة الأملاك وتأجير العقارات السكنية والتجارية، نحرص على تقديم خدمة متميزة تُلبّي تطلعات عملائنا وتحافظ على قيمة استثماراتهم.</p>
+    </div>
+    <div class="about-grid">
+      <div class="aimg reveal">
+        <div class="logo-box">
+          <img class="logo-spin" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhpBxf0Gc1pjKeOu2RvKha2fyn4p07AMaZKpdjmHo8gMpmplLfvFBeAR57i7T1KSey4FpbJc-s3JNyCXx2BBSekOM8q2c4RjiCa7pm40uf52CM0xlH_O3luIdrNvwzOTe4532qxF7qZ4J_udDaNViD7wWUxt3RSHH9SPTsCK6wOkv5le1gUsu50r4ApKMM/s1280/1000028932.png" alt="شعار شركة خير الأنعام العقارية"/>
+        </div>
+      </div>
+      <div class="reveal">
+        <ul class="chk">
+          <li>إدارة احترافية شاملة للعقارات السكنية والتجارية</li>
+          <li>خبرة واسعة وعميقة في السوق العقاري الكويتي</li>
+          <li>شفافية تامة وتقارير دورية مفصّلة للملاك</li>
+          <li>فريق متخصص على أعلى مستوى من الكفاءة والأمانة</li>
+          <li>استجابة فورية لطلبات الصيانة والمتابعة الميدانية</li>
+          <li>استقطاب المستأجرين المناسبين بأسرع وقت ممكن</li>
+        </ul>
+        <a href="#contact" class="btn-gold nav-link">ابدأ معنا اليوم</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="dark">
+  <div class="container">
+    <div class="reveal">
+      <span class="sec-tag">✦ خدماتنا</span>
+      <h2 class="sec-title">ما نقدّمه لك</h2>
+      <div class="divider"></div>
+      <p class="sec-sub">باقة متكاملة من الخدمات العقارية تضمن لك راحة البال وعائداً استثمارياً مميزاً</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc reveal"><div class="svc-ico">🏢</div><h3>إدارة الأملاك</h3><p>إدارة شاملة لعقاراتك السكنية والتجارية بكفاءة عالية وشفافية تامة.</p></div>
+      <div class="svc reveal"><div class="svc-ico">🔑</div><h3>تأجير العقارات</h3><p>خدمة تأجير متكاملة تشمل الإعلان واستقطاب المستأجرين وإتمام العقود.</p></div>
+      <div class="svc reveal"><div class="svc-ico">🔧</div><h3>الصيانة والمتابعة</h3><p>متابعة جميع أعمال الصيانة الدورية والطارئة بأعلى جودة وأسرع وقت.</p></div>
+      <div class="svc reveal"><div class="svc-ico">📋</div><h3>التقارير الدورية</h3><p>تقارير مالية وإدارية دورية تُعلمك بكل تفاصيل عقاراتك بوضوح تام.</p></div>
+      <div class="svc reveal"><div class="svc-ico">💼</div><h3>الاستشارات العقارية</h3><p>استشارات احترافية لمساعدتك في اتخاذ أفضل القرارات الاستثمارية.</p></div>
+      <div class="svc reveal"><div class="svc-ico">📍</div><h3>تسجيل العقود</h3><p>تسهيل إجراءات تسجيل عقود الإيجار والمعاملات القانونية بسهولة.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why" class="dark">
+  <div class="container">
+    <div class="reveal">
+      <span class="sec-tag">✦ لماذا نحن</span>
+      <h2 class="sec-title">ما يُميّزنا<br><span>عن غيرنا</span></h2>
+      <div class="divider"></div>
+      <p class="sec-sub">علاقات طويلة الأمد مبنية على الثقة والشفافية والاحترافية الحقيقية</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item reveal"><span class="why-n">01</span><div class="why-t"><h3>خبرة محلية عميقة</h3><p>معرفة تامة بأسواق العقارات الكويتية وأنظمتها وإجراءاتها القانونية.</p></div></div>
+      <div class="why-item reveal"><span class="why-n">02</span><div class="why-t"><h3>إدارة ذكية ومنظمة</h3><p>أنظمة إدارية حديثة تضمن متابعة دقيقة لجميع عقاراتك وعائداتها.</p></div></div>
+      <div class="why-item reveal"><span class="why-n">03</span><div class="why-t"><h3>استجابة فورية 24/7</h3><p>فريق جاهز على مدار الساعة للرد على أي استفسار أو طارئ.</p></div></div>
+      <div class="why-item reveal"><span class="why-n">04</span><div class="why-t"><h3>شفافية مطلقة</h3><p>تقارير مالية وإدارية دورية تُطلعك على كل تفاصيل عقاراتك.</p></div></div>
+      <div class="why-item reveal"><span class="why-n">05</span><div class="why-t"><h3>شبكة علاقات واسعة</h3><p>شبكة من المستأجرين الموثوقين تضمن أسرع وأفضل التعاملات.</p></div></div>
+      <div class="why-item reveal"><span class="why-n">06</span><div class="why-t"><h3>أسعار تنافسية</h3><p>رسوم إدارية منافسة مقابل خدمة عالية الجودة لا مثيل لها.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video" class="dark">
+  <div class="container">
+    <div class="reveal">
+      <span class="sec-tag">✦ فيديو</span>
+      <h2 class="sec-title">شاهد <span>تعريفنا</span></h2>
+      <div class="divider"></div>
+      <p class="sec-sub">تعرف على خدماتنا ورسالتنا من خلال هذا الفيديو التعريفي</p>
+    </div>
+    <div class="video-wrapper reveal">
+      <div class="video-mask-top"></div>
+      <div class="video-box">
+        <iframe 
+          src="https://www.instagram.com/tv/CbR59pkg5FH/embed/" 
+          allowfullscreen 
+          loading="lazy"
+          scrolling="no"
+          title="فيديو تعريفي شركة خير الأنعام العقارية">
+        </iframe>
+      </div>
+      <div class="video-mask-bottom"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <span class="sec-tag">✦ تواصل معنا</span>
+      <h2 class="sec-title">نحن هنا <span>لخدمتك</span></h2>
+      <div class="divider"></div>
+      <p class="sec-sub">تواصل معنا الآن وسيسعد فريقنا بمساعدتك والإجابة على جميع استفساراتك</p>
+    </div>
+    <div class="contact-grid">
+      <div class="c-cards reveal">
+        <!-- Phone -->
+        <a class="c-card" href="tel:+96590999698">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg></div>
+          <div><div class="c-lbl">الهاتف</div><div class="c-val" dir="ltr" style="color:#0A0A0A;">+965 9099 9698</div></div>
+        </a>
+        <!-- WhatsApp -->
+        <a class="c-card wa-ico black-ico" href="https://wa.me/96566204022" target="_blank" rel="noopener">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+          <div><div class="c-lbl">واتساب</div><div class="c-val" dir="ltr" style="color:#0A0A0A;">+965 6620 4022</div></div>
+        </a>
+        <!-- Email -->
+        <a class="c-card black-ico" href="mailto:q8forrent@gmail.com">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+          <div><div class="c-lbl">البريد الإلكتروني</div><div class="c-val" dir="ltr" style="color:#0A0A0A;">q8forrent@gmail.com</div></div>
+        </a>
+        <!-- Instagram -->
+        <a class="c-card ig-ico" href="https://www.instagram.com/q8forrent" target="_blank" rel="noopener">
+          <div class="c-ico"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></div>
+          <div><div class="c-lbl">إنستغرام</div><div class="c-val" dir="ltr" style="color:#0A0A0A;">@q8forrent</div></div>
+        </a>
+      </div>
+
+      <div class="map-box reveal">
+        <iframe
+          src="https://maps.google.com/maps?q=29.3759,47.9774&hl=ar&z=15&output=embed"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="موقع الشركة">
+        </iframe>
+        <div class="map-foot">
+          📍 شركة خير الأنعام العقارية — دولة الكويت<br>
+          <a href="https://maps.app.goo.gl/XhgKJ4FgFtHKrHnR7" target="_blank" rel="noopener">فتح على خرائط Google ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<<footer>
+  <div class="foot-soc">
+    <a href="https://wa.me/96566204022" target="_blank" class="soc-btn" title="واتساب"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+    <a href="https://www.instagram.com/q8forrent" target="_blank" class="soc-btn" title="إنستغرام"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+    <a href="tel:+96590999698" class="soc-btn" title="هاتف"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg></a>
+    <a href="mailto:q8forrent@gmail.com" class="soc-btn" title="بريد"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+  </div>
+  <p class="foot-name">شركة خير الأنعام العقارية</p>
+  <p>متخصصون في إدارة الأملاك · دولة الكويت</p>
+  <p class="foot-copy">جميع الحقوق محفوظة © 2026 — <a href="mailto:q8forrent@gmail.com">q8forrent@gmail.com</a></p>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a class="float-wa" href="https://wa.me/96566204022" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-tip">تواصل معنا</span>
+</a>
+
+<script>
+/* ═══ DRAWER FUNCTIONS (define first) ═══════════ */
+const burger  = document.getElementById('burgerBtn');
+const drawer  = document.getElementById('drawer');
+const overlay = document.getElementById('overlay');
+const dClose  = document.getElementById('dClose');
+
+function openDrawer() {
+  drawer.classList.add('show');
+  overlay.classList.add('show');
+  burger.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  drawer.classList.remove('show');
+  overlay.classList.remove('show');
+  burger.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+burger.addEventListener('click', function() {
+  if (drawer.classList.contains('show')) {
+    closeDrawer();
+  } else {
+    openDrawer();
+  }
+});
+
+overlay.addEventListener('click', closeDrawer);
+dClose.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDrawer();
+});
+
+/* ═══ SMOOTH SCROLL with header offset ═══════════ */
+function smoothScrollTo(id) {
+  if (!id || id === '#') return;
+  const el = document.querySelector(id);
+  if (!el) return;
+  const off = document.querySelector('header').offsetHeight + 6;
+  const top = el.getBoundingClientRect().top + window.scrollY - off;
+  window.scrollTo({ top: top, behavior: 'smooth' });
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    const h = a.getAttribute('href');
+    if (h.length < 2) return;
+    e.preventDefault();
+    smoothScrollTo(h);
+    closeDrawer();
+  });
+});
+
+/* ═══ SCROLL REVEAL ═══════════════════════════════ */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+}, { threshold: 0.09 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ═══ ACTIVE NAV ══════════════════════════════════ */
+const secs  = [...document.querySelectorAll('section[id]')];
+const links = [...document.querySelectorAll('.desk-nav a[href^="#"]')];
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 150) cur = s.id; });
+  links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+cur));
+}, { passive: true });
+
+/* ═══ VIDEO SECTION SCROLL FIX ═══════════════════ */
+document.querySelectorAll('a[href="#video"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.getElementById('video');
+    if (el) {
+      const off = document.querySelector('header').offsetHeight + 6;
+      window.scrollTo({ top: el.offsetTop - off, behavior: 'smooth' });
+      closeDrawer();
+    }
+  });
+});
+</script>
+</body>
+</html>
